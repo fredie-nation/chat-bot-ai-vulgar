@@ -25,6 +25,7 @@
       cursor: pointer;
       box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
       z-index: 1000;
+      transition: opacity 0.3s ease;
     }
     
     /* Chat overlay (hidden by default) */
@@ -324,13 +325,21 @@
 
     <div class="floating-hearts"></div>
     <script>
-    document.getElementById("floating-chat-btn").addEventListener("click", function() {
-      document.getElementById("chat-overlay").style.display = "flex";
+    const chatBtn = document.getElementById("floating-chat-btn");
+    const chatOverlay = document.getElementById("chat-overlay");
+    const chatBox = document.getElementById("chat-box");
+    
+    chatBtn.addEventListener("click", function() {
+      chatOverlay.style.display = "flex";
+      chatBtn.style.opacity = "0"; // Sembunyikan tombol chat
+      setTimeout(() => { chatBtn.style.display = "none"; }, 300);
     });
     
-    document.getElementById("chat-overlay").addEventListener("click", function(event) {
-      if (!document.getElementById("chat-box").contains(event.target)) {
-        document.getElementById("chat-overlay").style.display = "none";
+    chatOverlay.addEventListener("click", function(event) {
+      if (!chatBox.contains(event.target)) {
+        chatOverlay.style.display = "none";
+        chatBtn.style.display = "flex"; // Munculkan tombol chat lagi
+        setTimeout(() => { chatBtn.style.opacity = "1"; }, 100);
       }
     });
     </script>
