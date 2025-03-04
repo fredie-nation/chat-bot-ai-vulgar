@@ -40,15 +40,25 @@
       align-items: center;
       justify-content: center;
       z-index: 999;
+      opacity: 0;
+      transition: opacity 0.3s ease-in-out;
     }
     
     /* Chat input container */
+    .input-container {
+      position: fixed;
+      bottom: 50%;
+      right: 20px;
+      width: 90%;
+      max-width: 400px;
+      transform: translateX(100%);
+      transition: transform 0.4s ease-in-out;
+    }
+    
     .input-row {
       background: white;
       padding: 10px;
       border-radius: 10px;
-      width: 90%;
-      max-width: 400px;
       display: flex;
       gap: 10px;
       box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
@@ -69,6 +79,16 @@
       padding: 10px;
       border-radius: 5px;
       cursor: pointer;
+    }
+    
+    /* Class untuk memunculkan chat */
+    .chat-overlay.active {
+      display: flex;
+      opacity: 1;
+    }
+    
+    .input-container.active {
+      transform: translateX(0);
     }
     </style>
   </head>
@@ -311,11 +331,13 @@
           
           <!-- Chat Input Container -->
           <div class="chat-overlay" id="chat-overlay">
-            <div class="input-row" id="chat-box">
-              <textarea id="user-input" placeholder="Type your message..." rows="1"></textarea>
-              <button id="send-button">
-                <i class="fas fa-paper-plane"></i>
-              </button>
+            <div class="input-container">
+              <div class="input-row" id="chat-box">
+                <textarea id="user-input" placeholder="Type your message..." rows="1"></textarea>
+                <button id="send-button">
+                  <i class="fas fa-paper-plane"></i>
+                </button>
+              </div>
             </div>
           </div>
           
@@ -328,26 +350,36 @@
     <script>
     const chatBtn = document.getElementById("floating-chat-btn");
     const chatOverlay = document.getElementById("chat-overlay");
-    const chatBox = document.getElementById("chat-box");
+    const chatBoxContainer = document.querySelector(".input-container");
     const sendButton = document.getElementById("send-button");
     
-    // Fungsi untuk menutup chat dan munculin tombol floating
+    // Fungsi untuk menutup chat dengan animasi
     function closeChat() {
-      chatOverlay.style.display = "none";
-      chatBtn.style.display = "flex"; 
-      setTimeout(() => { chatBtn.style.opacity = "1"; }, 100);
+      chatBoxContainer.classList.remove("active");
+      chatOverlay.style.opacity = "0";
+    
+      setTimeout(() => {
+        chatOverlay.style.display = "none";
+        chatBtn.style.display = "flex";
+        setTimeout(() => { chatBtn.style.opacity = "1"; }, 100);
+      }, 300);
     }
     
-    // Ketika tombol chat diklik, tampilkan input
+    // Ketika tombol chat diklik, tampilkan input dengan efek slide
     chatBtn.addEventListener("click", function() {
       chatOverlay.style.display = "flex";
+      setTimeout(() => { 
+        chatOverlay.style.opacity = "1";
+        chatBoxContainer.classList.add("active");
+      }, 50);
+      
       chatBtn.style.opacity = "0"; 
       setTimeout(() => { chatBtn.style.display = "none"; }, 300);
     });
     
     // Klik di luar chat box untuk menutup
     chatOverlay.addEventListener("click", function(event) {
-      if (!chatBox.contains(event.target)) {
+      if (!chatBoxContainer.contains(event.target)) {
         closeChat();
       }
     });
