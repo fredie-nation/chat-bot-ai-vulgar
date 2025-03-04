@@ -892,22 +892,56 @@ function handleSendMessage() {
 }
 
 function sendMessageFromFloating() {
-  const message = floatingUserInput.value.trim();
-  
-  if (!message) return;
-  
-  // Tambahkan pesan user ke chat
-  addUserMessage(message);
-  
-  // Bersihkan input dan sembunyikan
-  floatingUserInput.value = '';
-  hideFloatingInput();
-  floatingUserInput.style.height = 'auto';
-  sendToGemini(message);
-  
-  // Proses pesan seperti biasa
-  // ...
-}
+    const message = floatingUserInput.value.trim();
+    
+    if (!message) return;
+    
+    // Add user message to chat
+    addUserMessage(message);
+    
+    // Clear input and hide floating input
+    floatingUserInput.value = '';
+    hideFloatingInput();
+    
+    // Show AI is typing
+    const loadingAnimation = document.createElement('div');
+    loadingAnimation.className = 'loading-animation';
+    loadingAnimation.id = 'typing-indicator';
+    
+    for (let i = 0; i < 3; i++) {
+      const dot = document.createElement('div');
+      dot.className = 'dot';
+      loadingAnimation.appendChild(dot);
+    }
+    
+    chatMessages.appendChild(loadingAnimation);
+    chatMessages.scrollTop = chatMessages.scrollHeight;
+    
+    // Simulate AI response after delay
+    setTimeout(() => {
+      document.getElementById('typing-indicator').remove();
+      
+      if (isGangBangMode) {
+        // In gang bang mode, check which characters are selected
+        const selectedChars = getSelectedCharacters();
+        
+        if (selectedChars.length === 0) {
+          addSystemMessage("Please select at least one character to respond.");
+          return;
+        }
+        
+        // Add responses from selected characters
+        selectedChars.forEach((char, index) => {
+          setTimeout(() => {
+            addCharacterMessage(char, getAIResponse(message, char));
+          }, index * 1000); // Stagger responses
+        });
+      } else {
+        // Normal mode - single character response
+        addAIMessage(getAIResponse(message));
+      }
+    }, 1500);
+  }
 
 // Toggle dark/light theme
 function toggleTheme() {
