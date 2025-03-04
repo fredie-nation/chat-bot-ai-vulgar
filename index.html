@@ -1,0 +1,257 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="https://cdn-icons-png.flaticon.com/512/6676/6676018.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Chat with Hinata</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;700&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+  </head>
+  <body>
+    <!-- Welcome Modal -->
+    <div class="welcome-modal" id="welcome-modal">
+      <div class="welcome-content">
+        <div class="welcome-header">
+          <img src="https://i.pinimg.com/736x/26/56/2b/26562b09a2e39953c6a586e11e0e5be7.jpg" alt="Hinata">
+          <h2>Welcome to Chat with Hinata</h2>
+        </div>
+        <div class="welcome-body">
+          <div class="input-group">
+            <label for="user-name">What's your name?</label>
+            <input type="text" id="user-name" placeholder="Enter your name...">
+            <span class="error-message" id="name-error">Please enter your name</span>
+          </div>
+          
+          <div class="input-group">
+            <label>Choose Chat Mode:</label>
+            <div class="personality-options">
+              <div class="personality-option">
+                <input type="radio" id="flirty" name="personality" value="flirty" checked>
+                <label for="flirty">
+                  <div class="option-icon"><i class="fas fa-heart"></i></div>
+                  <div class="option-text">
+                    <h4>Pacar Genit dan Sangat Panas</h4>
+                    <p>Pasangan yang sangat genit dan intim</p>
+                  </div>
+                </label>
+              </div>
+              
+              <div class="personality-option">
+                <input type="radio" id="mommy" name="personality" value="mommy">
+                <label for="mommy">
+                  <div class="option-icon"><i class="fas fa-home"></i></div>
+                  <div class="option-text">
+                    <h4>Ibu yang Peduli + Vulgar</h4>
+                    <p>Sosok ibu yang penuh perhatian dan kasih sayang</p>
+                  </div>
+                </label>
+              </div>
+              
+              <div class="personality-option">
+                <input type="radio" id="jealous" name="personality" value="jealous">
+                <label for="jealous">
+                  <div class="option-icon"><i class="fas fa-fire"></i></div>
+                  <div class="option-text">
+                    <h4>Pacar cemburu</h4>
+                    <p>Pasangan yang pemarah, pencemburu, tapi perhatian</p>
+                  </div>
+                </label>
+              </div>
+              
+              <div class="personality-option">
+                <input type="radio" id="teacher" name="personality" value="teacher">
+                <label for="teacher">
+                  <div class="option-icon"><i class="fas fa-book"></i></div>
+                  <div class="option-text">
+                    <h4>Guru Intim</h4>
+                    <p>Memandu Anda melalui hubungan dan keintiman</p>
+                  </div>
+                </label>
+              </div>
+              
+              <div class="personality-option">
+                <input type="radio" id="gangbang" name="personality" value="gangbang">
+                <label for="gangbang">
+                  <div class="option-icon"><i class="fas fa-users"></i></div>
+                  <div class="option-text">
+                    <h4>Gang Bang (3 AI)</h4>
+                    <p>Chat dengan Hinata, Ino, dan Sakura sekaligus</p>
+                  </div>
+                </label>
+              </div>
+            </div>
+            <span class="error-message" id="personality-error">Please select a personality</span>
+          </div>
+          
+          <button id="start-chat-btn" class="start-chat-btn">Start Chatting</button>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Personality Edit Modal -->
+    <div class="edit-modal" id="edit-modal">
+      <div class="welcome-content">
+        <div class="welcome-header">
+          <div class="modal-close">
+            <button id="close-edit-modal"><i class="fas fa-times"></i></button>
+          </div>
+          <img src="https://i.pinimg.com/736x/26/56/2b/26562b09a2e39953c6a586e11e0e5be7.jpg" alt="Hinata">
+          <h2>Change Chat Mode</h2>
+        </div>
+        <div class="welcome-body">
+          <div class="input-group">
+            <label for="edit-user-name">Your name:</label>
+            <input type="text" id="edit-user-name" placeholder="Enter your name...">
+            <span class="error-message" id="edit-name-error">Please enter your name</span>
+          </div>
+          
+          <div class="input-group">
+            <label>Choose Chat Mode:</label>
+            <div class="personality-options">
+              <div class="personality-option">
+                <input type="radio" id="edit-flirty" name="edit-personality" value="flirty">
+                <label for="edit-flirty">
+                  <div class="option-icon"><i class="fas fa-heart"></i></div>
+                  <div class="option-text">
+                    <h4>Pacar Genit dan Sangat Panas</h4>
+                    <p>Pasangan yang sangat genit dan intim</p>
+                  </div>
+                </label>
+              </div>
+              
+              <div class="personality-option">
+                <input type="radio" id="edit-mommy" name="edit-personality" value="mommy">
+                <label for="edit-mommy">
+                  <div class="option-icon"><i class="fas fa-home"></i></div>
+                  <div class="option-text">
+                    <h4>Ibu yang Peduli + Vulgar</h4>
+                    <p>Sosok ibu yang penuh perhatian dan kasih sayang</p>
+                  </div>
+                </label>
+              </div>
+              
+              <div class="personality-option">
+                <input type="radio" id="edit-jealous" name="edit-personality" value="jealous">
+                <label for="edit-jealous">
+                  <div class="option-icon"><i class="fas fa-fire"></i></div>
+                  <div class="option-text">
+                    <h4>Pacar cemburu</h4>
+                    <p>Pasangan yang pemarah, pencemburu, tapi perhatian</p>
+                  </div>
+                </label>
+              </div>
+              
+              <div class="personality-option">
+                <input type="radio" id="edit-teacher" name="edit-personality" value="teacher">
+                <label for="edit-teacher">
+                  <div class="option-icon"><i class="fas fa-book"></i></div>
+                  <div class="option-text">
+                    <h4>Guru Intim</h4>
+                    <p>Memandu Anda melalui hubungan dan keintiman</p>
+                  </div>
+                </label>
+              </div>
+              
+              <div class="personality-option">
+                <input type="radio" id="edit-gangbang" name="edit-personality" value="gangbang">
+                <label for="edit-gangbang">
+                  <div class="option-icon"><i class="fas fa-users"></i></div>
+                  <div class="option-text">
+                    <h4>Gang Bang (3 AI)</h4>
+                    <p>Chat dengan Hinata, Ino, dan Sakura sekaligus</p>
+                  </div>
+                </label>
+              </div>
+            </div>
+            <span class="error-message" id="edit-personality-error">Please select a personality</span>
+          </div>
+          
+          <button id="update-chat-btn" class="start-chat-btn">Update Settings</button>
+        </div>
+      </div>
+    </div>
+    
+    <div class="container">
+      <div class="chat-container">
+        <div class="chat-header">
+          <div class="profile">
+            <div class="avatar">
+              <img src="https://i.pinimg.com/736x/26/56/2b/26562b09a2e39953c6a586e11e0e5be7.jpg" alt="Hinata" id="header-avatar">
+            </div>
+            <div class="user-info">
+              <h2 id="header-name">Hinata</h2>
+              <p><i class="fas fa-circle online"></i> <span id="header-status">Always Online For You</span></p>
+            </div>
+          </div>
+          <div class="actions">
+            <button id="personality-btn" title="Change Personality"><i class="fas fa-user-edit"></i></button>
+            <button id="theme-toggle"><i class="fas fa-moon"></i></button>
+          </div>
+        </div>
+        
+        <div class="chat-messages" id="chat-messages">
+          <!-- Messages will appear here -->
+          <div class="loading-animation initial-loading">
+            <div class="dot"></div>
+            <div class="dot"></div>
+            <div class="dot"></div>
+          </div>
+        </div>
+        
+        <div class="chat-input">
+          <!-- Character selector toggle (only visible in gang bang mode) -->
+          <div class="character-toggle" id="character-toggle">
+            <span>Select who responds:</span>
+            <div class="selected-characters" id="selected-characters">
+              <span>All characters</span>
+            </div>
+            <i class="fas fa-chevron-down"></i>
+          </div>
+          
+          <!-- Character selector (only visible in gang bang mode) -->
+          <div class="character-selector" id="character-selector">
+            <div class="character-option">
+              <input type="checkbox" id="select-hinata" value="hinata">
+              <label for="select-hinata">
+                <div class="character-icon">
+                  <img src="https://i.pinimg.com/736x/26/56/2b/26562b09a2e39953c6a586e11e0e5be7.jpg" alt="Hinata">
+                </div>
+                <span class="character-name hinata">Hinata</span>
+              </label>
+            </div>
+            <div class="character-option">
+              <input type="checkbox" id="select-ino" value="ino">
+              <label for="select-ino">
+                <div class="character-icon">
+                  <img src="https://i.pinimg.com/736x/dc/00/f1/dc00f16f79c1866f95e438ccbd799696.jpg" alt="Ino">
+                </div>
+                <span class="character-name ino">Ino</span>
+              </label>
+            </div>
+            <div class="character-option">
+              <input type="checkbox" id="select-sakura" value="sakura">
+              <label for="select-sakura">
+                <div class="character-icon">
+                  <img src="https://i.pinimg.com/736x/35/9c/b4/359cb467773e6b049f45ad7806ad1152.jpg" alt="Sakura">
+                </div>
+                <span class="character-name sakura">Sakura</span>
+              </label>
+            </div>
+          </div>
+          
+          <div class="input-row">
+            <textarea id="user-input" placeholder="Type your message..." rows="1"></textarea>
+            <button id="send-button">
+              <i class="fas fa-paper-plane"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="floating-hearts"></div>
+    <script type="module" src="main.js"></script>
+  </body>
+</html>
