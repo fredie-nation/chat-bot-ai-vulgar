@@ -19,6 +19,12 @@ const headerAvatar = document.getElementById('header-avatar');
 const headerName = document.getElementById('header-name');
 const headerStatus = document.getElementById('header-status');
 
+const floatingChatBtn = document.getElementById('floating-chat-btn');
+const floatingChatInput = document.getElementById('floating-chat-input');
+const floatingUserInput = document.getElementById('floating-user-input');
+const floatingChatSendBtn = document.getElementById('floating-send-button');
+const overlay = document.getElementById('overlay');
+
 // Character selector elements
 const characterToggle = document.getElementById('character-toggle');
 const characterSelector = document.getElementById('character-selector');
@@ -329,6 +335,33 @@ function createFloatingHearts() {
     
     heartsContainer.appendChild(heart);
   }
+}
+
+floatingChatBtn.addEventListener('click', showFloatingInput);
+floatingChatSendBtn.addEventListener('click', sendMessageFromFloating);
+overlay.addEventListener('click', hideFloatingInput);
+floatingUserInput.addEventListener('keypress', function(e) {
+  if (e.key === 'Enter' && !e.shiftKey) {
+    e.preventDefault();
+    sendMessageFromFloating();
+  }
+  adjustTextareaHeight(this);
+});
+floatingUserInput.addEventListener('input', function() {
+  adjustTextareaHeight(this);
+});
+
+// Fungsi untuk menampilkan input mengambang
+function showFloatingInput() {
+  floatingChatInput.classList.add('active');
+  overlay.classList.add('active');
+  floatingUserInput.focus();
+}
+
+// Fungsi untuk menyembunyikan input mengambang
+function hideFloatingInput() {
+  floatingChatInput.classList.remove('active');
+  overlay.classList.remove('active');
 }
 
 // Auto resize textarea
@@ -856,6 +889,24 @@ function handleSendMessage() {
     userInput.style.height = 'auto';
     sendToGemini(message);
   }
+}
+
+function sendMessageFromFloating() {
+  const message = floatingUserInput.value.trim();
+  
+  if (!message) return;
+  
+  // Tambahkan pesan user ke chat
+  addUserMessage(message);
+  
+  // Bersihkan input dan sembunyikan
+  floatingUserInput.value = '';
+  hideFloatingInput();
+  floatingUserInput.style.height = 'auto';
+  sendToGemini(message);
+  
+  // Proses pesan seperti biasa
+  // ...
 }
 
 // Toggle dark/light theme
