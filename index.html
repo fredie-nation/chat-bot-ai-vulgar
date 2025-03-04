@@ -14,7 +14,7 @@
       position: fixed;
       bottom: 50%;
       right: 20px;
-      background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+      background: #007bff;
       color: white;
       width: 50px;
       height: 50px;
@@ -324,25 +324,38 @@
     </div>
 
     <div class="floating-hearts"></div>
+    <script type="module" src="main.js"></script>
     <script>
     const chatBtn = document.getElementById("floating-chat-btn");
     const chatOverlay = document.getElementById("chat-overlay");
     const chatBox = document.getElementById("chat-box");
+    const sendButton = document.getElementById("send-button");
     
+    // Fungsi untuk menutup chat dan munculin tombol floating
+    function closeChat() {
+      chatOverlay.style.display = "none";
+      chatBtn.style.display = "flex"; 
+      setTimeout(() => { chatBtn.style.opacity = "1"; }, 100);
+    }
+    
+    // Ketika tombol chat diklik, tampilkan input
     chatBtn.addEventListener("click", function() {
       chatOverlay.style.display = "flex";
-      chatBtn.style.opacity = "0"; // Sembunyikan tombol chat
+      chatBtn.style.opacity = "0"; 
       setTimeout(() => { chatBtn.style.display = "none"; }, 300);
     });
     
+    // Klik di luar chat box untuk menutup
     chatOverlay.addEventListener("click", function(event) {
       if (!chatBox.contains(event.target)) {
-        chatOverlay.style.display = "none";
-        chatBtn.style.display = "flex"; // Munculkan tombol chat lagi
-        setTimeout(() => { chatBtn.style.opacity = "1"; }, 100);
+        closeChat();
       }
     });
+    
+    // Klik tombol send untuk menutup chat
+    sendButton.addEventListener("click", function() {
+      closeChat();
+    });
     </script>
-    <script type="module" src="main.js"></script>
   </body>
 </html>
