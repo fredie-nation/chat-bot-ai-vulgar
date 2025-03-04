@@ -8,74 +8,6 @@
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;700&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
-    <style>
-      /* Untuk mobile */
-      @media (max-width: 767px) {
-        .chat-input .input-row {
-          display: none !important; /* Sembunyikan input default di mobile */
-        }
-        
-        .floating-chat-btn {
-          display: flex; /* Tampilkan tombol floating */
-          position: fixed;
-          bottom: 20px;
-          right: 20px;
-          width: 60px;
-          height: 60px;
-          background: #007bff;
-          border-radius: 50%;
-          align-items: center;
-          justify-content: center;
-          cursor: pointer;
-          z-index: 1000;
-          box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-        }
-      
-        /* Input modal yang muncul di tengah */
-        .mobile-input-modal {
-          position: fixed;
-          top: 50%;
-          left: 50%;
-          transform: translate(-50%, -50%);
-          width: 90%;
-          max-width: 400px;
-          background: white;
-          padding: 20px;
-          border-radius: 15px;
-          z-index: 1002;
-          display: none;
-          box-shadow: 0 0 20px rgba(0,0,0,0.2);
-        }
-      
-        .mobile-input-modal.active {
-          display: block;
-        }
-      
-        .mobile-input-modal textarea {
-          width: 100%;
-          padding: 15px;
-          border: 1px solid #ddd;
-          border-radius: 10px;
-          resize: none;
-          min-height: 100px;
-        }
-      
-        .overlay {
-          position: fixed;
-          top: 0;
-          left: 0;
-          right: 0;
-          bottom: 0;
-          background: rgba(0,0,0,0.5);
-          z-index: 1001;
-          display: none;
-        }
-      
-        .overlay.active {
-          display: block;
-        }
-      }
-    </style>
   </head>
   <body>
     <!-- Welcome Modal -->
@@ -320,42 +252,6 @@
     </div>
 
     <div class="floating-hearts"></div>
-
-    <div class="mobile-input-modal" id="mobile-input-modal">
-      <textarea placeholder="Type your message..." rows="4"></textarea>
-      <button id="mobile-send-button" class="send-button">
-        <i class="fas fa-paper-plane"></i> Send
-      </button>
-    </div>
-    
-    <script>
-      // Get elements
-const floatingChatBtn = document.getElementById('floating-chat-btn');
-const inputRow = document.querySelector('.input-row');
-const overlay = document.createElement('div');
-overlay.classList.add('overlay');
-document.body.appendChild(overlay);
-
-// Show input prompt when floating button is clicked
-floatingChatBtn.addEventListener('click', () => {
-  inputRow.style.display = 'flex';
-  overlay.style.display = 'block';
-});
-
-// Hide input prompt when clicking outside of it
-overlay.addEventListener('click', () => {
-  inputRow.style.display = 'none';
-  overlay.style.display = 'none';
-});
-
-// Hide input prompt when clicking anywhere outside the input prompt
-document.addEventListener('click', (event) => {
-  if (!inputRow.contains(event.target) {
-    inputRow.style.display = 'none';
-    overlay.style.display = 'none';
-  }
-});
-    </script>
     <script type="module" src="main.js"></script>
   </body>
 </html>
