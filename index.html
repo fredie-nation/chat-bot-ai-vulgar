@@ -28,7 +28,7 @@
       transition: opacity 0.3s ease;
     }
     
-    /* Chat overlay */
+    /* Chat overlay (hidden by default) */
     .chat-overlay {
       display: none;
       position: fixed;
@@ -51,10 +51,8 @@
       right: 20px;
       width: 90%;
       max-width: 400px;
-      transform: scale(0);
-      opacity: 0;
-      border-radius: 50%;
-      transition: transform 0.4s ease-in-out, opacity 0.4s ease-in-out, border-radius 0.4s ease-in-out;
+      transform: translateX(100%);
+      transition: transform 0.4s ease-in-out;
     }
     
     .input-row {
@@ -64,20 +62,33 @@
       display: flex;
       gap: 10px;
       box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
-      overflow: hidden;
     }
     
-    /* Efek Black Hole */
-    .input-container.active {
-      transform: scale(1);
+    .input-row textarea {
+      flex: 1;
+      border: none;
+      padding: 10px;
+      outline: none;
+      resize: none;
+    }
+    
+    .input-row button {
+      background: #007bff;
+      border: none;
+      color: white;
+      padding: 10px;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    
+    /* Class untuk memunculkan chat */
+    .chat-overlay.active {
+      display: flex;
       opacity: 1;
-      border-radius: 10px;
     }
     
-    .input-container.closing {
-      transform: scale(0);
-      opacity: 0;
-      border-radius: 50%;
+    .input-container.active {
+      transform: translateX(0);
     }
     </style>
   </head>
@@ -318,7 +329,7 @@
             <i class="fas fa-paper-plane"></i>
           </div>
           
-          <!-- Chat Overlay -->
+          <!-- Chat Input Container -->
           <div class="chat-overlay" id="chat-overlay">
             <div class="input-container">
               <div class="input-row" id="chat-box">
@@ -342,20 +353,19 @@
     const chatBoxContainer = document.querySelector(".input-container");
     const sendButton = document.getElementById("send-button");
     
-    // Fungsi untuk menutup chat dengan efek black hole
+    // Fungsi untuk menutup chat dengan animasi
     function closeChat() {
-      chatBoxContainer.classList.add("closing");
+      chatBoxContainer.classList.remove("active");
       chatOverlay.style.opacity = "0";
     
       setTimeout(() => {
-        chatBoxContainer.classList.remove("active", "closing");
         chatOverlay.style.display = "none";
         chatBtn.style.display = "flex";
         setTimeout(() => { chatBtn.style.opacity = "1"; }, 100);
-      }, 400);
+      }, 300);
     }
     
-    // Ketika tombol chat diklik, tampilkan input dengan efek black hole keluar
+    // Ketika tombol chat diklik, tampilkan input dengan efek slide
     chatBtn.addEventListener("click", function() {
       chatOverlay.style.display = "flex";
       setTimeout(() => { 
