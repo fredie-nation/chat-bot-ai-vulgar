@@ -19,12 +19,6 @@ const headerAvatar = document.getElementById('header-avatar');
 const headerName = document.getElementById('header-name');
 const headerStatus = document.getElementById('header-status');
 
-const floatingChatBtn = document.getElementById('floating-chat-btn');
-const floatingChatInput = document.getElementById('floating-chat-input');
-const floatingUserInput = document.getElementById('floating-user-input');
-const floatingChatSendBtn = document.getElementById('floating-send-button');
-const overlay = document.getElementById('overlay');
-
 // Character selector elements
 const characterToggle = document.getElementById('character-toggle');
 const characterSelector = document.getElementById('character-selector');
@@ -335,33 +329,6 @@ function createFloatingHearts() {
     
     heartsContainer.appendChild(heart);
   }
-}
-
-floatingChatBtn.addEventListener('click', showFloatingInput);
-floatingChatSendBtn.addEventListener('click', sendMessageFromFloating);
-overlay.addEventListener('click', hideFloatingInput);
-floatingUserInput.addEventListener('keypress', function(e) {
-  if (e.key === 'Enter' && !e.shiftKey) {
-    e.preventDefault();
-    sendMessageFromFloating();
-  }
-  adjustTextareaHeight(this);
-});
-floatingUserInput.addEventListener('input', function() {
-  adjustTextareaHeight(this);
-});
-
-// Fungsi untuk menampilkan input mengambang
-function showFloatingInput() {
-  floatingChatInput.classList.add('active');
-  overlay.classList.add('active');
-  floatingUserInput.focus();
-}
-
-// Fungsi untuk menyembunyikan input mengambang
-function hideFloatingInput() {
-  floatingChatInput.classList.remove('active');
-  overlay.classList.remove('active');
 }
 
 // Auto resize textarea
@@ -890,58 +857,6 @@ function handleSendMessage() {
     sendToGemini(message);
   }
 }
-
-function sendMessageFromFloating() {
-    const message = floatingUserInput.value.trim();
-    
-    if (!message) return;
-    
-    // Add user message to chat
-    addUserMessage(message);
-    
-    // Clear input and hide floating input
-    floatingUserInput.value = '';
-    hideFloatingInput();
-    
-    // Show AI is typing
-    const loadingAnimation = document.createElement('div');
-    loadingAnimation.className = 'loading-animation';
-    loadingAnimation.id = 'typing-indicator';
-    
-    for (let i = 0; i < 3; i++) {
-      const dot = document.createElement('div');
-      dot.className = 'dot';
-      loadingAnimation.appendChild(dot);
-    }
-    
-    chatMessages.appendChild(loadingAnimation);
-    chatMessages.scrollTop = chatMessages.scrollHeight;
-    
-    // Simulate AI response after delay
-    setTimeout(() => {
-      document.getElementById('typing-indicator').remove();
-      
-      if (isGangBangMode) {
-        // In gang bang mode, check which characters are selected
-        const selectedChars = getSelectedCharacters();
-        
-        if (selectedChars.length === 0) {
-          addSystemMessage("Please select at least one character to respond.");
-          return;
-        }
-        
-        // Add responses from selected characters
-        selectedChars.forEach((char, index) => {
-          setTimeout(() => {
-            addCharacterMessage(char, getAIResponse(message, char));
-          }, index * 1000); // Stagger responses
-        });
-      } else {
-        // Normal mode - single character response
-        addAIMessage(getAIResponse(message));
-      }
-    }, 1500);
-  }
 
 // Toggle dark/light theme
 function toggleTheme() {
