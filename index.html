@@ -109,12 +109,13 @@
             <span class="error-message" id="name-error">Please enter your name</span>
           </div>
 
+          <!-- Language Selection -->
           <div class="input-group">
             <label>Choose Language:</label>
             <div class="personality-options">
               <div class="personality-option">
-                <input type="radio" id="edit-english" name="edit-language" value="english">
-                <label for="edit-english">
+                <input type="radio" id="english" name="language" value="english" checked>
+                <label for="english">
                   <div class="option-icon"><i class="fas fa-language"></i></div>
                   <div class="option-text">
                     <h4>English</h4>
@@ -124,8 +125,8 @@
               </div>
               
               <div class="personality-option">
-                <input type="radio" id="edit-indonesian" name="edit-language" value="indonesian">
-                <label for="edit-indonesian">
+                <input type="radio" id="indonesian" name="language" value="indonesian">
+                <label for="indonesian">
                   <div class="option-icon"><i class="fas fa-globe-asia"></i></div>
                   <div class="option-text">
                     <h4>Indonesian</h4>
@@ -135,8 +136,8 @@
               </div>
               
               <div class="personality-option">
-                <input type="radio" id="edit-mixed" name="edit-language" value="mixed">
-                <label for="edit-mixed">
+                <input type="radio" id="mixed" name="language" value="mixed">
+                <label for="mixed">
                   <div class="option-icon"><i class="fas fa-random"></i></div>
                   <div class="option-text">
                     <h4>Mixed (Indonesian + English)</h4>
@@ -145,7 +146,7 @@
                 </label>
               </div>
             </div>
-            <span class="error-message" id="edit-language-error">Please select a language</span>
+            <span class="error-message" id="language-error">Please select a language</span>
           </div>
           
           <div class="input-group">
@@ -229,6 +230,46 @@
             <label for="edit-user-name">Your name:</label>
             <input type="text" id="edit-user-name" placeholder="Enter your name...">
             <span class="error-message" id="edit-name-error">Please enter your name</span>
+          </div>
+
+          <!-- Language Selection -->
+          <div class="input-group">
+            <label>Choose Language:</label>
+            <div class="personality-options">
+              <div class="personality-option">
+                <input type="radio" id="edit-english" name="edit-language" value="english">
+                <label for="edit-english">
+                  <div class="option-icon"><i class="fas fa-language"></i></div>
+                  <div class="option-text">
+                    <h4>English</h4>
+                    <p>Chat in English only</p>
+                  </div>
+                </label>
+              </div>
+              
+              <div class="personality-option">
+                <input type="radio" id="edit-indonesian" name="edit-language" value="indonesian">
+                <label for="edit-indonesian">
+                  <div class="option-icon"><i class="fas fa-globe-asia"></i></div>
+                  <div class="option-text">
+                    <h4>Indonesian</h4>
+                    <p>Chat in Indonesian only</p>
+                  </div>
+                </label>
+              </div>
+              
+              <div class="personality-option">
+                <input type="radio" id="edit-mixed" name="edit-language" value="mixed">
+                <label for="edit-mixed">
+                  <div class="option-icon"><i class="fas fa-random"></i></div>
+                  <div class="option-text">
+                    <h4>Mixed (Indonesian + English)</h4>
+                    <p>Chat in both languages</p>
+                  </div>
+                </label>
+              </div>
+            </div>
+            <span class="error-message" id="edit-language-error">Please select a language</span>
           </div>
           
           <div class="input-group">
