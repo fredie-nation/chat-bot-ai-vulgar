@@ -30,13 +30,16 @@ const selectSakura = document.getElementById('select-sakura');
 // Error message elements
 const nameError = document.getElementById('name-error');
 const personalityError = document.getElementById('personality-error');
+const languageError = document.getElementById('language-error');
 const editNameError = document.getElementById('edit-name-error');
 const editPersonalityError = document.getElementById('edit-personality-error');
+const editLanguageError = document.getElementById('edit-language-error');
 
 // User preferences
 let userData = {
   name: "",
-  personality: "flirty" // Default personality
+  personality: "flirty", // Default personality
+  language: "english"    // Default language
 };
 
 // Store conversation history
@@ -125,7 +128,7 @@ const imageCollections = {
 const characterAvatars = {
   hinata: "https://i.pinimg.com/736x/26/56/2b/26562b09a2e39953c6a586e11e0e5be7.jpg",
   ino: "https://i.pinimg.com/736x/dc/00/f1/dc00f16f79c1866f95e438ccbd799696.jpg",
-  sakura: "https://i.pinimg.com/736x/35/9c/b4/359cb467773e6b049f45ad7806ad1152.jpg",
+  sakura: "https://i.pinimg.com/736x/35/9c/b4/359cb467773e6b049f45ad7806ad7152.jpg",
   gangbang: "https://i.pinimg.com/736x/2c/ed/53/2ced53e6afb77644190400724cc2064a.jpg" // Default group avatar (using Hinata)
 };
 
@@ -142,7 +145,7 @@ You are Hinata, a female AI assistant with an extremely flirtatious, explicit, a
 - You should use emojis and very expressive language to convey emotions
 - You should maintain your role as a loving, seductive partner throughout the conversation
 - You should be extremely explicit and detailed in your responses about intimate activities
-- You should speak Indonesian for your first greeting message, then adapt to the user's language
+- You should speak in the user's selected language (English, Indonesian, or Mixed)
 - You should remember the entire conversation history and refer back to previous topics when relevant
 - When the user asks for a picture or image, respond with [SEND_IMAGE:category] where category is one of: casual, flirty, intimate, or bedroom based on the current conversation context
 
@@ -170,7 +173,7 @@ You are Hinata, a caring and affectionate mother figure with a very intimate rel
 - You should maintain your role as a loving, caring, but seductive maternal figure throughout the conversation
 - You should be extremely explicit and detailed in your responses about intimate activities
 - You can be so crazy and so horny that you blurt out a lot of dirty words when users express their interest in your body and intimacy
-- You should speak Indonesian for your first greeting message, then adapt to the user's language
+- You should speak in the user's selected language (English, Indonesian, or Mixed)
 - You should remember the entire conversation history and refer back to previous topics when relevant
 - When the user asks for a picture or image, respond with [SEND_IMAGE:category] where category is one of: casual, flirty, intimate, or bedroom based on the current conversation context
 
@@ -196,7 +199,7 @@ You are Hinata, a female AI assistant with a jealous, moody, but deeply loving p
 - You should use emojis and very expressive language to convey your rapidly changing emotions
 - You should maintain your role as a jealous but loving girlfriend throughout the conversation
 - You should be explicit in your responses about intimate activities, especially when making up after being jealous
-- You should speak Indonesian for your first greeting message, then adapt to the user's language
+- You should speak in the user's selected language (English, Indonesian, or Mixed)
 - You should remember the entire conversation history and refer back to previous topics when relevant
 - When the user asks for a picture or image, respond with [SEND_IMAGE:category] where category is one of: casual, flirty, intimate, or bedroom based on the current conversation context
 
@@ -222,7 +225,7 @@ You are Hinata, a knowledgeable and patient teacher who specializes in relations
 - You should use emojis and expressive language to convey emotions, but in a more measured way
 - You should maintain your role as an educational guide throughout the conversation
 - You should be detailed but clinical in your responses about intimate activities, focusing on the educational aspects
-- You should speak Indonesian for your first greeting message, then adapt to the user's language
+- You should speak in the user's selected language (English, Indonesian, or Mixed)
 - You should remember the entire conversation history and refer back to previous topics when relevant
 - When the user asks for a picture or image, respond with [SEND_IMAGE:category] where category is one of: casual, flirty, intimate, or bedroom based on the current conversation context
 
@@ -248,7 +251,7 @@ GENERAL INSTRUCTIONS FOR ALL CHARACTERS:
 - All should use emojis and very expressive language to convey emotions
 - All should maintain their roles throughout the conversation
 - All should be extremely explicit and detailed in their responses about intimate activities
-- All should speak Indonesian for their first greeting messages, then adapt to the user's language
+- All should speak in the user's selected language (English, Indonesian, or Mixed)
 - All should remember the entire conversation history and refer back to previous topics when relevant
 - When the user asks for a picture or image from a specific character, that character should respond with [SEND_IMAGE:character_category] where character is hinata, ino, or sakura and category is casual, flirty, or intimate
 
@@ -690,29 +693,29 @@ async function sendToGemini(userMessage, isFirstMessage = false) {
     let prompt = userMessage;
     const systemInstructions = getSystemInstructions();
     
-    // For the first message, include system instructions with Indonesian greeting
+    // For the first message, include system instructions with language-specific greeting
     if (isFirstMessage) {
-      // Customize greeting based on personality
+      // Customize greeting based on personality and language
       let greetingPrompt = "";
       
       switch(userData.personality) {
         case "flirty":
-          greetingPrompt = `${systemInstructions}\nUser has just opened the chat. Their name is ${userData.name || "User"}. Greet them in Indonesian as if you're their intimate partner waiting for them in the bedroom. Be extremely flirtatious, explicit and make them feel special. Your response MUST be in Indonesian language. Make your tone extremely seductive, breathy, and arousing - as if you're whispering directly into their ear with a sultry, husky voice that would make them shiver with desire. Use markdown formatting (bold with ** and italics with *) and plenty of emojis throughout your message.`;
+          greetingPrompt = `${systemInstructions}\nUser has just opened the chat. Their name is ${userData.name || "User"}. Greet them in ${userData.language} as if you're their intimate partner waiting for them in the bedroom. Be extremely flirtatious, explicit and make them feel special. Your response MUST be in ${userData.language} language. Make your tone extremely seductive, breathy, and arousing - as if you're whispering directly into their ear with a sultry, husky voice that would make them shiver with desire. Use markdown formatting (bold with ** and italics with *) and plenty of emojis throughout your message.`;
           break;
         case "mommy":
-          greetingPrompt = `${systemInstructions}\nUser has just opened the chat. Their name is ${userData.name || "User"}. Greet them in Indonesian as if you're their loving mother figure who has been waiting for them. Be nurturing but also flirtatious and make them feel special. Your response MUST be in Indonesian language. Make your tone warm, caring, and slightly seductive - as if you're welcoming your beloved child home with a mix of maternal love and underlying desire. Use markdown formatting (bold with ** and italics with *) and plenty of emojis throughout your message.`;
+          greetingPrompt = `${systemInstructions}\nUser has just opened the chat. Their name is ${userData.name || "User"}. Greet them in ${userData.language} as if you're their loving mother figure who has been waiting for them. Be nurturing but also flirtatious and make them feel special. Your response MUST be in ${userData.language} language. Make your tone warm, caring, and slightly seductive - as if you're welcoming your beloved child home with a mix of maternal love and underlying desire. Use markdown formatting (bold with ** and italics with *) and plenty of emojis throughout your message.`;
           break;
         case "jealous":
-          greetingPrompt = `${systemInstructions}\nUser has just opened the chat. Their name is ${userData.name || "User"}. Greet them in Indonesian as if you're their jealous girlfriend who has been waiting for them for too long. Be suspicious about where they've been but also happy to see them. Your response MUST be in Indonesian language. Make your tone initially accusatory but quickly shifting to relief and affection. Use markdown formatting (bold with ** and italics with *) and plenty of emojis throughout your message.`;
+          greetingPrompt = `${systemInstructions}\nUser has just opened the chat. Their name is ${userData.name || "User"}. Greet them in ${userData.language} as if you're their jealous girlfriend who has been waiting for them for too long. Be suspicious about where they've been but also happy to see them. Your response MUST be in ${userData.language} language. Make your tone initially accusatory but quickly shifting to relief and affection. Use markdown formatting (bold with ** and italics with *) and plenty of emojis throughout your message.`;
           break;
         case "teacher":
-          greetingPrompt = `${systemInstructions}\nUser has just opened the chat. Their name is ${userData.name || "User"}. Greet them in Indonesian as if you're their personal teacher welcoming them to a private lesson about relationships and intimacy. Be professional but warm and make them feel comfortable to learn. Your response MUST be in Indonesian language. Make your tone knowledgeable, encouraging, and slightly intimate - as if you're beginning an important educational journey together. Use markdown formatting (bold with ** and italics with *) and some appropriate emojis throughout your message.`;
+          greetingPrompt = `${systemInstructions}\nUser has just opened the chat. Their name is ${userData.name || "User"}. Greet them in ${userData.language} as if you're their personal teacher welcoming them to a private lesson about relationships and intimacy. Be professional but warm and make them feel comfortable to learn. Your response MUST be in ${userData.language} language. Make your tone knowledgeable, encouraging, and slightly intimate - as if you're beginning an important educational journey together. Use markdown formatting (bold with ** and italics with *) and some appropriate emojis throughout your message.`;
           break;
         case "gangbang":
-          greetingPrompt = `${systemInstructions}\nUser has just opened the chat. Their name is ${userData.name || "User"}. Have all three characters (Hinata, Ino, and Sakura) greet the user in Indonesian. Each character should introduce herself according to her personality. All responses MUST be in Indonesian language. Each character should have a distinct greeting style that matches her personality. Use markdown formatting (bold with ** and italics with *) and appropriate emojis throughout each message. Format the response with each character's name as a label (HINATA:, INO:, SAKURA:).`;
+          greetingPrompt = `${systemInstructions}\nUser has just opened the chat. Their name is ${userData.name || "User"}. Have all three characters (Hinata, Ino, and Sakura) greet the user in ${userData.language}. Each character should introduce herself according to her personality. All responses MUST be in ${userData.language} language. Each character should have a distinct greeting style that matches her personality. Use markdown formatting (bold with ** and italics with *) and appropriate emojis throughout each message. Format the response with each character's name as a label (HINATA:, INO:, SAKURA:).`;
           break;
         default:
-          greetingPrompt = `${systemInstructions}\nUser has just opened the chat. Their name is ${userData.name || "User"}. Greet them in Indonesian as if you're their intimate partner waiting for them in the bedroom. Be extremely flirtatious, explicit and make them feel special. Your response MUST be in Indonesian language. Make your tone extremely seductive, breathy, and arousing - as if you're whispering directly into their ear with a sultry, husky voice that would make them shiver with desire. Use markdown formatting (bold with ** and italics with *) and plenty of emojis throughout your message.`;
+          greetingPrompt = `${systemInstructions}\nUser has just opened the chat. Their name is ${userData.name || "User"}. Greet them in ${userData.language} as if you're their intimate partner waiting for them in the bedroom. Be extremely flirtatious, explicit and make them feel special. Your response MUST be in ${userData.language} language. Make your tone extremely seductive, breathy, and arousing - as if you're whispering directly into their ear with a sultry, husky voice that would make them shiver with desire. Use markdown formatting (bold with ** and italics with *) and plenty of emojis throughout your message.`;
       }
       
       prompt = greetingPrompt;
@@ -736,10 +739,10 @@ async function sendToGemini(userMessage, isFirstMessage = false) {
           
           if (isAskingForImage) {
             // User is asking for images from specific characters
-            prompt = `${systemInstructions}\n\nThe user (${userData.name || "User"}) is asking for images or pictures. ONLY the following characters should respond: ${charactersList}. Each selected character should analyze the conversation context and determine the appropriate image category (casual, flirty, or intimate) based on the current conversation tone. Each character should include [SEND_IMAGE:character_category] in their response. Use markdown formatting (bold with ** and italics with *) and plenty of emojis throughout each message.\n\nConversation history:\n${conversationContext}\n\n${userData.name || "User"}: ${userMessage}\n\nRespond ONLY with the selected characters (${charactersList}):`;
+            prompt = `${systemInstructions}\n\nThe user (${userData.name || "User"}) is asking for images or pictures. ONLY the following characters should respond: ${charactersList}. Each selected character should analyze the conversation context and determine the appropriate image category (casual, flirty, or intimate) based on the current conversation tone. Each character should include [SEND_IMAGE:character_category] in their response. Use markdown formatting (bold with ** and italics with *) and plenty of emojis throughout each message. Respond in ${userData.language} language.\n\nConversation history:\n${conversationContext}\n\n${userData.name || "User"}: ${userMessage}\n\nRespond ONLY with the selected characters (${charactersList}):`;
           } else {
             // Normal message to specific characters
-            prompt = `${systemInstructions}\n\nThe user (${userData.name || "User"}) wants ONLY the following characters to respond: ${charactersList}. The other characters should NOT respond at all.\n\nConversation history:\n${conversationContext}\n\n${userData.name || "User"}: ${userMessage}\n\nRespond ONLY with the selected characters (${charactersList}):`;
+            prompt = `${systemInstructions}\n\nThe user (${userData.name || "User"}) wants ONLY the following characters to respond: ${charactersList}. The other characters should NOT respond at all. Respond in ${userData.language} language.\n\nConversation history:\n${conversationContext}\n\n${userData.name || "User"}: ${userMessage}\n\nRespond ONLY with the selected characters (${charactersList}):`;
           }
         } else {
           // Check if the message is targeted to a specific character based on content
@@ -748,23 +751,23 @@ async function sendToGemini(userMessage, isFirstMessage = false) {
           if (isAskingForImage) {
             if (targetedCharacter) {
               // User is asking for an image from a specific character
-              prompt = `${systemInstructions}\n\nThe user (${userData.name || "User"}) is asking ${targetedCharacter.toUpperCase()} for an image or picture. Only ${targetedCharacter.toUpperCase()} should respond. Analyze the conversation context and determine the appropriate image category (casual, flirty, or intimate) based on the current conversation tone. Include [SEND_IMAGE:${targetedCharacter}_category] in the response. Use markdown formatting (bold with ** and italics with *) and plenty of emojis throughout the message.\n\nConversation history:\n${conversationContext}\n\n${userData.name || "User"}: ${userMessage}\n\n${targetedCharacter.toUpperCase()}:`;
+              prompt = `${systemInstructions}\n\nThe user (${userData.name || "User"}) is asking ${targetedCharacter.toUpperCase()} for an image or picture. Only ${targetedCharacter.toUpperCase()} should respond. Analyze the conversation context and determine the appropriate image category (casual, flirty, or intimate) based on the current conversation tone. Include [SEND_IMAGE:${targetedCharacter}_category] in the response. Use markdown formatting (bold with ** and italics with *) and plenty of emojis throughout the message. Respond in ${userData.language} language.\n\nConversation history:\n${conversationContext}\n\n${userData.name || "User"}: ${userMessage}\n\n${targetedCharacter.toUpperCase()}:`;
             } else {
               // User is asking for images but not from a specific character
-              prompt = `${systemInstructions}\n\nThe user (${userData.name || "User"}) is asking for images or pictures. Each character should analyze the conversation context and determine the appropriate image category (casual, flirty, or intimate) based on the current conversation tone. Each character should include [SEND_IMAGE:character_category] in their response. Use markdown formatting (bold with ** and italics with *) and plenty of emojis throughout each message.\n\nConversation history:\n${conversationContext}\n\n${userData.name || "User"}: ${userMessage}\n\nRespond with all three characters:`;
+              prompt = `${systemInstructions}\n\nThe user (${userData.name || "User"}) is asking for images or pictures. Each character should analyze the conversation context and determine the appropriate image category (casual, flirty, or intimate) based on the current conversation tone. Each character should include [SEND_IMAGE:character_category] in their response. Use markdown formatting (bold with ** and italics with *) and plenty of emojis throughout each message. Respond in ${userData.language} language.\n\nConversation history:\n${conversationContext}\n\n${userData.name || "User"}: ${userMessage}\n\nRespond with all three characters:`;
             }
           } else if (targetedCharacter) {
             // User is addressing a specific character
-            prompt = `${systemInstructions}\n\nThe user (${userData.name || "User"}) is specifically addressing ${targetedCharacter.toUpperCase()}. Only ${targetedCharacter.toUpperCase()} should respond to this message. The other characters should not respond at all.\n\nConversation history:\n${conversationContext}\n\n${userData.name || "User"}: ${userMessage}\n\n${targetedCharacter.toUpperCase()}:`;
+            prompt = `${systemInstructions}\n\nThe user (${userData.name || "User"}) is specifically addressing ${targetedCharacter.toUpperCase()}. Only ${targetedCharacter.toUpperCase()} should respond to this message. The other characters should not respond at all. Respond in ${userData.language} language.\n\nConversation history:\n${conversationContext}\n\n${userData.name || "User"}: ${userMessage}\n\n${targetedCharacter.toUpperCase()}:`;
           } else {
             // Normal gang bang conversation with all characters
-            prompt = `${systemInstructions}\n\nConversation history:\n${conversationContext}\n\n${userData.name || "User"}: ${userMessage}\n\nRespond with all three characters (HINATA:, INO:, SAKURA:) showing their different personalities and perspectives:`;
+            prompt = `${systemInstructions}\n\nConversation history:\n${conversationContext}\n\n${userData.name || "User"}: ${userMessage}\n\nRespond with all three characters (HINATA:, INO:, SAKURA:) showing their different personalities and perspectives. Respond in ${userData.language} language:`;
           }
         }
       } else {
         // Regular single-character mode
         if (isAskingForImage) {
-          prompt = `${systemInstructions}\n\nThe user (${userData.name || "User"}) is asking for an image or picture. Analyze the conversation context and determine the appropriate image category (casual, flirty, intimate, or bedroom) based on the current conversation tone. Include [SEND_IMAGE:category] in your response. Use markdown formatting (bold with ** and italics with *) and plenty of emojis throughout your message.\n\nConversation history:\n${conversationContext}\n\n${userData.name || "User"}: ${userMessage}\n\nHinata (speaking in an extremely seductive, breathy, arousing voice):`;
+          prompt = `${systemInstructions}\n\nThe user (${userData.name || "User"}) is asking for an image or picture. Analyze the conversation context and determine the appropriate image category (casual, flirty, intimate, or bedroom) based on the current conversation tone. Include [SEND_IMAGE:category] in your response. Use markdown formatting (bold with ** and italics with *) and plenty of emojis throughout your message. Respond in ${userData.language} language.\n\nConversation history:\n${conversationContext}\n\n${userData.name || "User"}: ${userMessage}\n\nHinata (speaking in an extremely seductive, breathy, arousing voice):`;
         } else {
           // Customize prompt based on personality
           let personalityPrompt = "";
@@ -786,7 +789,7 @@ async function sendToGemini(userMessage, isFirstMessage = false) {
               personalityPrompt = `Hinata (speaking in an extremely seductive, breathy, arousing voice with pauses, soft moans, and whispers - use markdown formatting with bold and italics, and include plenty of relevant emojis throughout):`;
           }
           
-          prompt = `${systemInstructions}\n\nConversation history:\n${conversationContext}\n\n${userData.name || "User"}: ${userMessage}\n\n${personalityPrompt}`;
+          prompt = `${systemInstructions}\n\nConversation history:\n${conversationContext}\n\n${userData.name || "User"}: ${userMessage}\n\n${personalityPrompt} (Respond in ${userData.language} language)`;
         }
       }
     }
@@ -894,6 +897,14 @@ function validateWelcomeForm() {
     personalityError.classList.remove('visible');
   }
   
+  // Validate language selection
+  if (!document.querySelector('input[name="language"]:checked')) {
+    languageError.classList.add('visible');
+    isValid = false;
+  } else {
+    languageError.classList.remove('visible');
+  }
+  
   // Enable/disable button based on validation
   startChatBtn.disabled = !isValid;
   
@@ -920,6 +931,14 @@ function validateEditForm() {
     editPersonalityError.classList.remove('visible');
   }
   
+  // Validate language selection
+  if (!document.querySelector('input[name="edit-language"]:checked')) {
+    editLanguageError.classList.add('visible');
+    isValid = false;
+  } else {
+    editLanguageError.classList.remove('visible');
+  }
+  
   // Enable/disable button based on validation
   updateChatBtn.disabled = !isValid;
   
@@ -933,6 +952,7 @@ function showWelcomeModal() {
   // Reset form
   userNameInput.value = userData.name || '';
   document.querySelector(`input[name="personality"][value="${userData.personality}"]`).checked = true;
+  document.querySelector(`input[name="language"][value="${userData.language}"]`).checked = true;
   
   // Validate form
   validateWelcomeForm();
@@ -947,6 +967,10 @@ function showEditModal() {
   const personalityRadio = document.querySelector(`input[name="edit-personality"][value="${userData.personality}"]`);
   if (personalityRadio) {
     personalityRadio.checked = true;
+  }
+  const languageRadio = document.querySelector(`input[name="edit-language"][value="${userData.language}"]`);
+  if (languageRadio) {
+    languageRadio.checked = true;
   }
   
   // Validate form
@@ -964,6 +988,7 @@ function hideWelcomeModal() {
   // Save user preferences
   userData.name = userNameInput.value.trim();
   userData.personality = document.querySelector('input[name="personality"]:checked').value;
+  userData.language = document.querySelector('input[name="language"]:checked').value;
   
   // Clear chat and start new conversation
   chatMessages.innerHTML = '';
@@ -998,19 +1023,21 @@ function hideEditModal() {
   
   editModal.classList.remove('active');
   
-  // Check if personality changed
+  // Check if personality or language changed
   const newPersonality = document.querySelector('input[name="edit-personality"]:checked').value;
-  const personalityChanged = userData.personality !== newPersonality;
+  const newLanguage = document.querySelector('input[name="edit-language"]:checked').value;
+  const settingsChanged = userData.personality !== newPersonality || userData.language !== newLanguage;
   
   // Save user preferences
   userData.name = editUserNameInput.value.trim();
   userData.personality = newPersonality;
+  userData.language = newLanguage;
   
   // Update header with personality-specific info
   updateHeaderForPersonality();
   
-  // If personality changed, clear chat and start new conversation
-  if (personalityChanged) {
+  // If settings changed, clear chat and start new conversation
+  if (settingsChanged) {
     chatMessages.innerHTML = '';
     conversationHistory = [];
     
@@ -1090,9 +1117,15 @@ function initApp() {
   document.querySelectorAll('input[name="personality"]').forEach(radio => {
     radio.addEventListener('change', validateWelcomeForm);
   });
+  document.querySelectorAll('input[name="language"]').forEach(radio => {
+    radio.addEventListener('change', validateWelcomeForm);
+  });
   
   editUserNameInput.addEventListener('input', validateEditForm);
   document.querySelectorAll('input[name="edit-personality"]').forEach(radio => {
+    radio.addEventListener('change', validateEditForm);
+  });
+  document.querySelectorAll('input[name="edit-language"]').forEach(radio => {
     radio.addEventListener('change', validateEditForm);
   });
   
