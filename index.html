@@ -108,6 +108,45 @@
             <input type="text" id="user-name" placeholder="Enter your name...">
             <span class="error-message" id="name-error">Please enter your name</span>
           </div>
+
+          <div class="input-group">
+            <label>Choose Language:</label>
+            <div class="personality-options">
+              <div class="personality-option">
+                <input type="radio" id="edit-english" name="edit-language" value="english">
+                <label for="edit-english">
+                  <div class="option-icon"><i class="fas fa-language"></i></div>
+                  <div class="option-text">
+                    <h4>English</h4>
+                    <p>Chat in English only</p>
+                  </div>
+                </label>
+              </div>
+              
+              <div class="personality-option">
+                <input type="radio" id="edit-indonesian" name="edit-language" value="indonesian">
+                <label for="edit-indonesian">
+                  <div class="option-icon"><i class="fas fa-globe-asia"></i></div>
+                  <div class="option-text">
+                    <h4>Indonesian</h4>
+                    <p>Chat in Indonesian only</p>
+                  </div>
+                </label>
+              </div>
+              
+              <div class="personality-option">
+                <input type="radio" id="edit-mixed" name="edit-language" value="mixed">
+                <label for="edit-mixed">
+                  <div class="option-icon"><i class="fas fa-random"></i></div>
+                  <div class="option-text">
+                    <h4>Mixed (Indonesian + English)</h4>
+                    <p>Chat in both languages</p>
+                  </div>
+                </label>
+              </div>
+            </div>
+            <span class="error-message" id="edit-language-error">Please select a language</span>
+          </div>
           
           <div class="input-group">
             <label>Choose Chat Mode:</label>
