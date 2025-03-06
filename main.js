@@ -1,3 +1,4 @@
+
 // API Key for Gemini
 const API_KEY = "AIzaSyDyieErFeuS85rCCeFxRuo14pFfyUkD3Ig";
 const API_URL = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent";
@@ -52,13 +53,22 @@ let targetedCharacters = [];
 const imageCollections = {
   // Hinata images
   hinata_casual: [
-    "https://i.pinimg.com/736x/80/83/8d/80838dfb2e8e886323e70b1ada78ebe7.jpg",
-    "https://i.pinimg.com/736x/4b/f2/68/4bf268179b5e99605451e746d9096a7d.jpg",
-    "https://i.pinimg.com/736x/f7/b0/9e/f7b09ecda2152839f7705da8d0727c61.jpg"
+    "https://files.catbox.moe/evp08m.png",
+    "https://files.catbox.moe/lje5h3.png",
+    "https://i.pinimg.com/736x/cc/df/63/ccdf635628be1690f98e8ad52397c494.jpg",
+    "https://i.pinimg.com/736x/0e/60/c3/0e60c3802d7fdcbb66c13f5984c8aaef.jpg",
+    "https://i.pinimg.com/736x/bf/73/e7/bf73e7f4379a0108ba8f9f87cd785c75.jpg",
+    "https://i.pinimg.com/736x/fe/6d/a2/fe6da2380079169a1dd299953843da9d.jpg",
+    "https://i.pinimg.com/736x/65/5c/5e/655c5e24a8d3dd53b2e6702a40d27f75.jpg",
+    "https://i.pinimg.com/736x/d1/d3/f6/d1d3f6168f2024a4c829105f68f0c139.jpg",
+    "https://i.pinimg.com/736x/2b/a5/62/2ba5622a01abec9aba9086710ef6fb06.jpg",
+    "https://files.catbox.moe/sh4xf3.png"
   ],
   hinata_flirty: [
-    "https://i.pinimg.com/736x/51/28/de/5128de0f9a2f6cd625bbbb256d50b1a4.jpg",
-    "https://i.pinimg.com/736x/22/d9/10/22d910c551f78453c5519d867e9b31d8.jpg",
+    "https://files.catbox.moe/xlgvmj.png",
+    "https://files.catbox.moe/mhn3z1.png",
+    "https://i.pinimg.com/736x/e6/3c/55/e63c55d00220fb40c519229aea844f23.jpg",
+    "https://i.pinimg.com/736x/31/07/92/310792d3dea8f6f4254d017fcb842f3e.jpg",
     "https://i.pinimg.com/736x/03/aa/de/03aade95d145b70197c23a30d893adbc.jpg"
   ],
   hinata_intimate: [
