@@ -85,8 +85,13 @@ class HiddenHistoryManager {
   }
 
   loadAllHistories() {
-    const histories = localStorage.getItem('chatHistories');
-    return histories ? JSON.parse(histories) : {};
+    try {
+      const histories = localStorage.getItem('chatHistories');
+      return histories ? JSON.parse(histories) : {};
+    } catch (error) {
+      console.error('Error loading histories:', error);
+      return {};
+    }
   }
 
   calculateTotalChats(histories) {
@@ -163,7 +168,11 @@ class HiddenHistoryManager {
   }
 }
 
-// Initialize the hidden history manager
+// Initialize the hidden history manager when the DOM is loaded
 document.addEventListener('DOMContentLoaded', () => {
-  window.hiddenHistoryManager = new HiddenHistoryManager();
+  try {
+    window.hiddenHistoryManager = new HiddenHistoryManager();
+  } catch (error) {
+    console.error('Error initializing history manager:', error);
+  }
 });
