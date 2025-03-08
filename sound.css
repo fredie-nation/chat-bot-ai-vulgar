@@ -23,6 +23,7 @@
 .sound-button i {
   font-size: 12px;
   color: var(--primary-color);
+  transition: all 0.3s ease;
 }
 
 .sound-button.playing {
@@ -32,6 +33,33 @@
 
 .sound-button.playing i {
   color: white;
+}
+
+/* Tambahkan animasi untuk transisi icon */
+.sound-button i.fa-volume-up,
+.sound-button i.fa-pause {
+  position: absolute;
+  transition: transform 0.3s ease, opacity 0.3s ease;
+}
+
+.sound-button:not(.playing) i.fa-pause {
+  opacity: 0;
+  transform: scale(0.5);
+}
+
+.sound-button.playing i.fa-volume-up {
+  opacity: 0;
+  transform: scale(0.5);
+}
+
+.sound-button.playing i.fa-pause {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.sound-button:not(.playing) i.fa-volume-up {
+  opacity: 1;
+  transform: scale(1);
 }
 
 @keyframes pulse {
