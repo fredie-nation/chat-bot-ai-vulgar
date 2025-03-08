@@ -23,6 +23,31 @@ const VOICE_IDS = {
   sakura: 'AZnzlk1XvdvUeBnXmlld'  // Strong, determined female voice
 };
 
+// Dynamic responses for images based on character personality
+const IMAGE_RESPONSES = {
+  hinata: [
+    "Mmm... sayang, apa kamu suka melihat foto ku? Aku sangat senang bisa membuatmu bergairah...",
+    "Ahh... kamu pasti sangat terangsang melihat tubuhku kan? Aku jadi malu...",
+    "Sayang... aku sangat menginginkanmu sekarang... apa kamu juga menginginkanku?",
+    "Mmm... tubuhku hanya untukmu sayang... sentuhlah aku sepuasmu...",
+    "Ahh... aku sangat basah membayangkan sentuhanmu di seluruh tubuhku..."
+  ],
+  ino: [
+    "Hey hot stuff, kamu pasti tidak bisa menahan diri melihat tubuh seksi ku kan?",
+    "Mmm... aku tahu kamu sangat menginginkan tubuhku sayang... ayo kita bersenang-senang...",
+    "Ahh... lihat betapa indahnya tubuhku ini... kamu pasti ingin merasakannya kan?",
+    "Sayang... aku sangat terangsang sekarang... ayo kita puaskan hasrat kita...",
+    "Mmm... aku ingin merasakan sentuhanmu di setiap inci tubuhku..."
+  ],
+  sakura: [
+    "Ahh... kamu pasti sangat bergairah melihat tubuhku yang seksi ini kan?",
+    "Mmm... aku tahu kamu sangat menginginkanku... ayo kita bermain kasar...",
+    "Sayang... aku ingin kamu menikmati setiap bagian tubuhku...",
+    "Ahh... aku sangat basah membayangkan apa yang akan kamu lakukan padaku...",
+    "Mmm... ayo kita puaskan hasrat kita sampai pagi..."
+  ]
+};
+
 class SoundManager {
   constructor() {
     this.isPlaying = false;
@@ -31,20 +56,22 @@ class SoundManager {
     this.setupMutationObserver();
   }
 
-  // Get the current API key
   getCurrentApiKey() {
     return ELEVENLABS_API_KEYS[this.currentApiKeyIndex];
   }
 
-  // Rotate to the next API key
   rotateApiKey() {
     this.currentApiKeyIndex = (this.currentApiKeyIndex + 1) % ELEVENLABS_API_KEYS.length;
     console.log('Switching to next API key...');
     return this.getCurrentApiKey();
   }
 
+  getRandomResponse(character) {
+    const responses = IMAGE_RESPONSES[character];
+    return responses[Math.floor(Math.random() * responses.length)];
+  }
+
   setupMutationObserver() {
-    // Watch for new AI messages
     const observer = new MutationObserver((mutations) => {
       mutations.forEach((mutation) => {
         if (mutation.type === 'childList') {
@@ -75,25 +102,33 @@ class SoundManager {
     soundButton.className = 'sound-button';
     soundButton.innerHTML = '<i class="fas fa-volume-up"></i>';
     
-    // Get the message content
-    const messageContent = messageNode.querySelector('.message-content')?.textContent || messageNode.textContent;
+    // Determine character and voice
+    let character = 'hinata';
+    let voiceId = VOICE_IDS.hinata;
     
-    // Determine which voice to use based on the message class
-    let voiceId;
     if (messageNode.classList.contains('ino')) {
+      character = 'ino';
       voiceId = VOICE_IDS.ino;
     } else if (messageNode.classList.contains('sakura')) {
+      character = 'sakura';
       voiceId = VOICE_IDS.sakura;
-    } else {
-      voiceId = VOICE_IDS.hinata; // Default voice for Hinata and other modes
     }
 
+    // Check if message contains an image
+    const hasImage = messageNode.querySelector('img') !== null;
+    
     soundButton.addEventListener('click', async () => {
       if (this.isPlaying) {
         this.stopPlayback();
       } else {
         soundButton.classList.add('playing');
-        await this.playText(messageContent, voiceId, soundButton);
+        
+        // Use dynamic response for images, otherwise use message content
+        const text = hasImage 
+          ? this.getRandomResponse(character)
+          : (messageNode.querySelector('.message-content')?.textContent || messageNode.textContent);
+        
+        await this.playText(text, voiceId, soundButton);
         soundButton.classList.remove('playing');
       }
     });
@@ -102,7 +137,7 @@ class SoundManager {
   }
 
   async playText(text, voiceId, button) {
-    let attempts = ELEVENLABS_API_KEYS.length; // Number of attempts equals number of available API keys
+    let attempts = ELEVENLABS_API_KEYS.length;
     let success = false;
 
     while (attempts > 0 && !success) {
@@ -149,12 +184,11 @@ class SoundManager {
         attempts--;
         
         if (attempts > 0) {
-          this.rotateApiKey(); // Try next API key
+          this.rotateApiKey();
         } else {
           console.error('All API keys exhausted');
           this.isPlaying = false;
           button.classList.remove('playing');
-          // Show error message to user
           alert('Voice service temporarily unavailable. Please try again later.');
         }
       }
