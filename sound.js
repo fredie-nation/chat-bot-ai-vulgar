@@ -54,6 +54,7 @@ class SoundManager {
     this.currentAudio = null;
     this.currentApiKeyIndex = 0;
     this.audioCache = new AudioCache();
+    this.currentPlayingButton = null;
     this.setupMutationObserver();
   }
 
@@ -101,7 +102,10 @@ class SoundManager {
   addSoundButton(messageNode) {
     const soundButton = document.createElement('button');
     soundButton.className = 'sound-button';
-    soundButton.innerHTML = '<i class="fas fa-volume-up"></i>';
+    soundButton.innerHTML = `
+      <i class="fas fa-volume-up"></i>
+      <i class="fas fa-pause"></i>
+    `;
     
     // Determine character and voice
     let character = 'hinata';
@@ -119,19 +123,29 @@ class SoundManager {
     const hasImage = messageNode.querySelector('img') !== null;
     
     soundButton.addEventListener('click', async () => {
-      if (this.isPlaying) {
+      // Jika tombol yang diklik adalah tombol yang sedang memutar audio
+      if (this.currentPlayingButton === soundButton && this.isPlaying) {
         this.stopPlayback();
-      } else {
-        soundButton.classList.add('playing');
-        
-        // Use dynamic response for images, otherwise use message content
-        const text = hasImage 
-          ? this.getRandomResponse(character)
-          : (messageNode.querySelector('.message-content')?.textContent || messageNode.textContent);
-        
-        await this.playText(text, voiceId, character, soundButton);
-        soundButton.classList.remove('playing');
+        return;
       }
+
+      // Jika ada audio lain yang sedang diputar, hentikan dulu
+      if (this.isPlaying && this.currentPlayingButton) {
+        this.stopPlayback();
+      }
+
+      // Mulai pemutaran audio baru
+      soundButton.classList.add('playing');
+      this.currentPlayingButton = soundButton;
+      
+      // Use dynamic response for images, otherwise use message content
+      const text = hasImage 
+        ? this.getRandomResponse(character)
+        : (messageNode.querySelector('.message-content')?.textContent || messageNode.textContent);
+      
+      await this.playText(text, voiceId, character, soundButton);
+      soundButton.classList.remove('playing');
+      this.currentPlayingButton = null;
     });
 
     messageNode.appendChild(soundButton);
@@ -194,6 +208,7 @@ class SoundManager {
           console.error('All API keys exhausted');
           this.isPlaying = false;
           button.classList.remove('playing');
+          this.currentPlayingButton = null;
           alert('Voice service temporarily unavailable. Please try again later.');
         }
       }
@@ -208,6 +223,14 @@ class SoundManager {
       this.isPlaying = false;
       URL.revokeObjectURL(audioUrl);
       button.classList.remove('playing');
+      this.currentPlayingButton = null;
+    });
+
+    this.currentAudio.addEventListener('error', () => {
+      this.isPlaying = false;
+      URL.revokeObjectURL(audioUrl);
+      button.classList.remove('playing');
+      this.currentPlayingButton = null;
     });
 
     await this.currentAudio.play();
@@ -216,9 +239,14 @@ class SoundManager {
   stopPlayback() {
     if (this.currentAudio) {
       this.currentAudio.pause();
+      this.currentAudio.currentTime = 0;
       this.currentAudio = null;
     }
+    if (this.currentPlayingButton) {
+      this.currentPlayingButton.classList.remove('playing');
+    }
     this.isPlaying = false;
+    this.currentPlayingButton = null;
   }
 }
 
