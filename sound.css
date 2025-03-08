@@ -1,0 +1,68 @@
+/* Sound button styles */
+.sound-button {
+  position: absolute;
+  bottom: 5px;
+  right: 5px;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  border: none;
+  background: rgba(255, 255, 255, 0.8);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+  opacity: 0.6;
+}
+
+.message:hover .sound-button {
+  opacity: 1;
+}
+
+.sound-button i {
+  font-size: 12px;
+  color: var(--primary-color);
+}
+
+.sound-button.playing {
+  animation: pulse 1s infinite;
+  background: var(--primary-color);
+}
+
+.sound-button.playing i {
+  color: white;
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.1);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+/* Dark theme adjustments */
+.dark-theme .sound-button {
+  background: rgba(0, 0, 0, 0.3);
+}
+
+.dark-theme .sound-button i {
+  color: white;
+}
+
+/* Mobile adjustments */
+@media (max-width: 768px) {
+  .sound-button {
+    width: 20px;
+    height: 20px;
+  }
+
+  .sound-button i {
+    font-size: 10px;
+  }
+}
