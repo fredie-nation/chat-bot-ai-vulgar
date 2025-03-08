@@ -53,6 +53,7 @@ class SoundManager {
     this.isPlaying = false;
     this.currentAudio = null;
     this.currentApiKeyIndex = 0;
+    this.audioCache = new AudioCache();
     this.setupMutationObserver();
   }
 
@@ -128,7 +129,7 @@ class SoundManager {
           ? this.getRandomResponse(character)
           : (messageNode.querySelector('.message-content')?.textContent || messageNode.textContent);
         
-        await this.playText(text, voiceId, soundButton);
+        await this.playText(text, voiceId, character, soundButton);
         soundButton.classList.remove('playing');
       }
     });
@@ -136,7 +137,17 @@ class SoundManager {
     messageNode.appendChild(soundButton);
   }
 
-  async playText(text, voiceId, button) {
+  async playText(text, voiceId, character, button) {
+    // Generate a unique key for this audio
+    const audioKey = `${character}_${voiceId}_${text}`;
+    
+    // Try to get cached audio first
+    const cachedAudio = await this.audioCache.getAudio(audioKey);
+    if (cachedAudio) {
+      console.log('Using cached audio');
+      return this.playAudioFromBlob(cachedAudio, button);
+    }
+
     let attempts = ELEVENLABS_API_KEYS.length;
     let success = false;
 
@@ -166,17 +177,11 @@ class SoundManager {
         }
 
         const audioBlob = await response.blob();
-        const audioUrl = URL.createObjectURL(audioBlob);
         
-        this.currentAudio = new Audio(audioUrl);
+        // Cache the audio before playing
+        await this.audioCache.saveAudio(audioKey, audioBlob);
         
-        this.currentAudio.addEventListener('ended', () => {
-          this.isPlaying = false;
-          URL.revokeObjectURL(audioUrl);
-          button.classList.remove('playing');
-        });
-
-        await this.currentAudio.play();
+        await this.playAudioFromBlob(audioBlob, button);
         success = true;
 
       } catch (error) {
@@ -195,12 +200,124 @@ class SoundManager {
     }
   }
 
+  async playAudioFromBlob(audioBlob, button) {
+    const audioUrl = URL.createObjectURL(audioBlob);
+    this.currentAudio = new Audio(audioUrl);
+    
+    this.currentAudio.addEventListener('ended', () => {
+      this.isPlaying = false;
+      URL.revokeObjectURL(audioUrl);
+      button.classList.remove('playing');
+    });
+
+    await this.currentAudio.play();
+  }
+
   stopPlayback() {
     if (this.currentAudio) {
       this.currentAudio.pause();
       this.currentAudio = null;
     }
     this.isPlaying = false;
+  }
+}
+
+class AudioCache {
+  constructor() {
+    this.CACHE_PREFIX = 'audio_cache_';
+    this.CACHE_VERSION = 1;
+    this.MAX_CACHE_SIZE = 50 * 1024 * 1024; // 50MB limit
+    this.cleanupOldCache();
+  }
+
+  async cleanupOldCache() {
+    const keys = await this.getAllKeys();
+    let totalSize = 0;
+    
+    // Calculate total size and remove old version items
+    for (const key of keys) {
+      const item = await this.getCacheItem(key);
+      if (item && item.version !== this.CACHE_VERSION) {
+        localStorage.removeItem(key);
+      } else if (item) {
+        totalSize += item.size;
+      }
+    }
+
+    // If total size exceeds limit, remove oldest items
+    if (totalSize > this.MAX_CACHE_SIZE) {
+      const sortedKeys = keys.sort((a, b) => {
+        const itemA = JSON.parse(localStorage.getItem(a));
+        const itemB = JSON.parse(localStorage.getItem(b));
+        return itemA.timestamp - itemB.timestamp;
+      });
+
+      while (totalSize > this.MAX_CACHE_SIZE && sortedKeys.length > 0) {
+        const key = sortedKeys.shift();
+        const item = await this.getCacheItem(key);
+        if (item) {
+          totalSize -= item.size;
+          localStorage.removeItem(key);
+        }
+      }
+    }
+  }
+
+  async getAllKeys() {
+    return Object.keys(localStorage).filter(key => key.startsWith(this.CACHE_PREFIX));
+  }
+
+  async getCacheItem(key) {
+    const item = localStorage.getItem(key);
+    return item ? JSON.parse(item) : null;
+  }
+
+  async getAudio(key) {
+    const cacheKey = this.CACHE_PREFIX + key;
+    const item = await this.getCacheItem(cacheKey);
+    
+    if (!item) return null;
+
+    try {
+      const audioData = atob(item.data);
+      const arrayBuffer = new ArrayBuffer(audioData.length);
+      const uint8Array = new Uint8Array(arrayBuffer);
+      
+      for (let i = 0; i < audioData.length; i++) {
+        uint8Array[i] = audioData.charCodeAt(i);
+      }
+      
+      return new Blob([arrayBuffer], { type: 'audio/mpeg' });
+    } catch (error) {
+      console.error('Error retrieving cached audio:', error);
+      localStorage.removeItem(cacheKey);
+      return null;
+    }
+  }
+
+  async saveAudio(key, audioBlob) {
+    try {
+      const arrayBuffer = await audioBlob.arrayBuffer();
+      const uint8Array = new Uint8Array(arrayBuffer);
+      let binaryString = '';
+      
+      for (let i = 0; i < uint8Array.length; i++) {
+        binaryString += String.fromCharCode(uint8Array[i]);
+      }
+      
+      const base64Data = btoa(binaryString);
+      const cacheItem = {
+        version: this.CACHE_VERSION,
+        timestamp: Date.now(),
+        size: arrayBuffer.byteLength,
+        data: base64Data
+      };
+
+      localStorage.setItem(this.CACHE_PREFIX + key, JSON.stringify(cacheItem));
+      await this.cleanupOldCache();
+    } catch (error) {
+      console.error('Error caching audio:', error);
+    }
   }
 }
 
