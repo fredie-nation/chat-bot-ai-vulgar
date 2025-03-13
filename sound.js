@@ -11,7 +11,7 @@ const ELEVENLABS_API_KEYS = [
   'sk_c1fc1b98278aad7865fbee609f2320305024422d63e44b56',
   'sk_127a7b9985e0a3659d0d14671d880b01d097468f42e63a7f',
   'sk_fe84f7d153435f2057d7e529bbb5d9bd21f5687f00d6b381',
-  'sk_c64906350c26a93e21498c2d08d0a445470bb66fafad6c33'
+  'sk_f8b24ff413fb95db13a83cf8e4f5a9663e39fea6d77984f2'
 ];
 
 const ELEVENLABS_API_URL = 'https://api.elevenlabs.io/v1/text-to-speech';
