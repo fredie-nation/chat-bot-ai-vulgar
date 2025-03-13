@@ -14,7 +14,7 @@ const ELEVENLABS_API_KEYS = [
   'sk_f8b24ff413fb95db13a83cf8e4f5a9663e39fea6d77984f2'
 ];
 
-const ELEVENLABS_API_URL = 'https://api.elevenlabs.io/v1/text-to%20speech';
+const ELEVENLABS_API_URL = 'https://api.elevenlabs.io/v1/text-to-speech';
 
 // Voice IDs for different characters
 const VOICE_IDS = {
