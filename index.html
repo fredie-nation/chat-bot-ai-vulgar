@@ -9,6 +9,7 @@
     <link rel="stylesheet" href="riwayat.css">
     <link rel="stylesheet" href="view_image.css">
     <link rel="stylesheet" href="sound.css">
+    <link rel="stylesheet" href="video_call.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;700&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
     <style>
@@ -372,6 +373,7 @@
             </div>
           </div>
           <div class="actions">
+            <button id="video-call-trigger-btn" title="Start Video Call"><i class="fas fa-video"></i></button>
             <button id="history-btn" title="Chat History"><i class="fas fa-history"></i></button>
             <button id="personality-btn" title="Change Personality"><i class="fas fa-user-edit"></i></button>
             <button id="theme-toggle"><i class="fas fa-moon"></i></button>
@@ -428,6 +430,40 @@
             </div>
           </div>
           
+        <!-- Video Call Button in Gang Bang Mode -->
+        <div id="character-call-selector" class="character-selector-for-call" style="display: none;">
+          <h4>Choose character for video call:</h4>
+          <div class="character-options">
+            <div class="character-option-call">
+              <input type="radio" id="call-hinata" name="call-character" value="hinata" checked>
+              <label for="call-hinata">
+                <div class="character-icon-call">
+                  <img src="https://i.pinimg.com/736x/26/56/2b/26562b09a2e39953c6a586e11e0e5be7.jpg" alt="Hinata">
+                </div>
+                <span class="character-name-call">Hinata</span>
+              </label>
+            </div>
+            <div class="character-option-call">
+              <input type="radio" id="call-ino" name="call-character" value="ino">
+              <label for="call-ino">
+                <div class="character-icon-call">
+                  <img src="https://i.pinimg.com/736x/dc/00/f1/dc00f16f79c1866f95e438ccbd799696.jpg" alt="Ino">
+                </div>
+                <span class="character-name-call">Ino</span>
+              </label>
+            </div>
+            <div class="character-option-call">
+              <input type="radio" id="call-sakura" name="call-character" value="sakura">
+              <label for="call-sakura">
+                <div class="character-icon-call">
+                  <img src="https://i.pinimg.com/736x/35/9c/b4/359cb467773e6b049f45ad7806ad7152.jpg" alt="Sakura">
+                </div>
+                <span class="character-name-call">Sakura</span>
+              </label>
+            </div>
+          </div>
+        </div>
+
         <!-- Floating Chat Button -->
         <div class="floating-chat-btn" id="floating-chat-btn">
           <i class="fas fa-paper-plane"></i>
@@ -454,6 +490,7 @@
     <script type="module" src="riwayat.js"></script>
     <script type="module" src="view_image.js"></script>
     <script type="module" src="sound.js"></script>
+    <script type="module" src="video_call.js"></script>
     <script>
     const chatBtn = document.getElementById("floating-chat-btn");
     const chatOverlay = document.getElementById("chat-overlay");
