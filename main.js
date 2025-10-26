@@ -19,7 +19,6 @@ const closeEditModalBtn = document.getElementById('close-edit-modal');
 const headerAvatar = document.getElementById('header-avatar');
 const headerName = document.getElementById('header-name');
 const headerStatus = document.getElementById('header-status');
-const videoCallTriggerBtn = document.getElementById('video-call-trigger-btn');
 
 // Character selector elements
 const characterToggle = document.getElementById('character-toggle');
@@ -1009,12 +1008,8 @@ function hideWelcomeModal() {
   updateHeaderForPersonality();
   
   // Show/hide character selector for gang bang mode
-  const characterCallSelector = document.getElementById('character-call-selector');
   if (userData.personality === 'gangbang') {
     characterToggle.classList.add('active');
-    if (characterCallSelector) {
-      characterCallSelector.style.display = 'block';
-    }
     // Reset character selection
     targetedCharacters = [];
     selectHinata.checked = false;
@@ -1024,9 +1019,6 @@ function hideWelcomeModal() {
   } else {
     characterToggle.classList.remove('active');
     characterSelector.classList.remove('active');
-    if (characterCallSelector) {
-      characterCallSelector.style.display = 'none';
-    }
   }
   
   // Send initial greeting
@@ -1058,14 +1050,10 @@ function hideEditModal() {
   if (settingsChanged) {
     chatMessages.innerHTML = '';
     conversationHistory = [];
-
+    
     // Show/hide character selector for gang bang mode
-    const characterCallSelector = document.getElementById('character-call-selector');
     if (userData.personality === 'gangbang') {
       characterToggle.classList.add('active');
-      if (characterCallSelector) {
-        characterCallSelector.style.display = 'block';
-      }
       // Reset character selection
       targetedCharacters = [];
       selectHinata.checked = false;
@@ -1075,23 +1063,11 @@ function hideEditModal() {
     } else {
       characterToggle.classList.remove('active');
       characterSelector.classList.remove('active');
-      if (characterCallSelector) {
-        characterCallSelector.style.display = 'none';
-      }
     }
-
+    
     // Send initial greeting
     sendToGemini("", true);
   }
-}
-
-// Get current character for video call
-function getCurrentCharacter() {
-  if (userData.personality === 'gangbang') {
-    const selectedRadio = document.querySelector('input[name="call-character"]:checked');
-    return selectedRadio ? selectedRadio.value : 'hinata';
-  }
-  return 'hinata';
 }
 
 // Update header based on personality
@@ -1145,11 +1121,6 @@ function initApp() {
   updateChatBtn.addEventListener('click', hideEditModal);
   personalityBtn.addEventListener('click', showEditModal);
   closeEditModalBtn.addEventListener('click', () => editModal.classList.remove('active'));
-
-  videoCallTriggerBtn.addEventListener('click', () => {
-    const currentCharacter = getCurrentCharacter();
-    window.videoCallManager.openVideoCall(currentCharacter);
-  });
   
   // Form validation
   userNameInput.addEventListener('input', validateWelcomeForm);
@@ -1197,6 +1168,3 @@ function initApp() {
 
 // Initialize the app when the DOM is loaded
 document.addEventListener('DOMContentLoaded', initApp);
-
-// Make userData globally accessible for video call
-window.userData = userData;
